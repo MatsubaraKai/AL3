@@ -101,6 +101,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ゲームウィンドウの破棄
 	win->TerminateGameWindow();
-
+	
 	return 0;
 }
