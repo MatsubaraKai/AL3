@@ -7,11 +7,15 @@
 void Player::Initialize(Model* model, uint32_t textureHandle) {
 	//NULLポインタチェック
 	assert(model);
+	
+	WorldTransform* worldTransform_ = nullptr;
+}
+
+void Player::Update() { 
+	worldTransform_.TransferMatrix();
+
 
 }
 
-void Player::Update() {}
+void Player::Draw(ViewProjection) { model_->Draw(worldTransform_, ViewProjection, textureHandle_); }
 
-void Player::Draw() {}
-
-Player::~Initialize() { delete model; }

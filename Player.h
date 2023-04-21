@@ -22,7 +22,7 @@ public:
 	///< summary>
 	/// 描画
 	///</summary>
-	void Draw();
+	void Draw(ViewProjection);
 
 private:
 	//ワールド変換データ
@@ -30,5 +30,5 @@ private:
 	//モデル
 	Model* model_ = nullptr;
 	//テクスチャハンドル
-	uint32_t textureHandle_ = 0;
+	uint32_t textureHandle_ = 0u;
 };
