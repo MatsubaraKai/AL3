@@ -28,7 +28,7 @@ void GameScene::Initialize() {
 	//自キャラ
 	player_ = new Player();
 	//自キャラの初期化
-	player_->Initialize();
+	player_->Initialize(model_,textureHandle_);
 
 
 
@@ -56,7 +56,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
-	player_->Draw();
+	
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -71,6 +71,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	player_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
