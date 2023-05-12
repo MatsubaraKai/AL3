@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Audio.h"
+#include "AxisIndicator.h"
 #include "DirectXCommon.h"
 #include "Input.h"
 #include "Model.h"
@@ -9,6 +10,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Player.h"
+#include "DebugCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -20,6 +22,10 @@ public: // メンバ関数
 	/// コンストクラタ
 	/// </summary>
 	GameScene();
+	//デバッグカメラ有効
+	bool isDebugCameraActive_ = false;
+	//デバッグカメラ
+	DebugCamera* debugCamera_ = nullptr;
 
 	/// <summary>
 	/// デストラクタ
