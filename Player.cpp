@@ -1,42 +1,40 @@
-#include "Player.h"
-#include "Matrix.h"
-#include "TextureManager.h"
 #include "ImGuiManager.h"
+#include "Matrix.h"
 #include "PrimitiveDrawer.h"
+#include "TextureManager.h"
 #include <cassert>
+#include "Player.h"
 
+Player::Player() {}
 
+Player::~Player() {
+	for (PlayerBullet* bullet : bullets_) {
+		delete bullet;
+	}
+}
 
-// 初期化
 void Player::Initialize(Model* model, uint32_t textureHandle) {
-	//NULLポインタチェック
 	assert(model);
-	
 
-	model_= model;
-	textureHandle_= textureHandle;
+	model_ = model;
+	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
 
 	input_ = Input::GetInstance();
 }
 
-
-
-
-void Player::Update() { 
-	worldTransform_.TransferMatrix();
-	//キャラクターの移動ベクトル
+void Player::Update() {
 	Vector3 move = {0, 0, 0};
-	//キャラクターの移動速さ
+
 	const float kCharacterSpeed = 0.2f;
-	//押した方向で移動ベクトルを変換(左右)
+
 	if (input_->PushKey(DIK_LEFT)) {
 		move.x -= kCharacterSpeed;
 	} else if (input_->PushKey(DIK_RIGHT)) {
 		move.x += kCharacterSpeed;
 	}
-	//押した方向で移動ベクトルを変更(上下)
+
 	if (input_->PushKey(DIK_DOWN)) {
 		move.y -= kCharacterSpeed;
 	} else if (input_->PushKey(DIK_UP)) {
@@ -48,25 +46,25 @@ void Player::Update() {
 	ImGui::Begin("Player");
 	ImGui::InputFloat3("InputFloat3", moves);
 	ImGui::SliderFloat3("SliderFloat3", moves, 0.0f, 2.0f);
-	ImGui::Text("DebugCamera SPACE\nRotate A D\nAttack W", 2050, 12, 31);
+	ImGui::Text("DebugCamera SPACE \n Bullet SPACE", 2050, 12, 31);
 	ImGui::End();
 
 	move.x = moves[0] - 1;
 	move.y = moves[1] - 1;
 	move.z = moves[2] - 1;
 
+	worldTransform_.translation_ = VectorAdd(worldTransform_.translation_, move);
 
-
+	// 旋回処理
 	Rotate();
 
 	// 攻撃処理
 	Attack();
 
 	// 弾更新
-	if (bullet_) {
-		bullet_->Update();
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Update();
 	}
-
 
 	// 移動制限
 	const float kMoveLimitX = 33;
@@ -81,33 +79,37 @@ void Player::Update() {
 	worldTransform_.matWorld_ = MakeAffineMatrix(
 	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
+	worldTransform_.TransferMatrix();
 }
+
 void Player::Rotate() {
-	// 回転速さ[ラジアン/frame]
+	// 回転の速さ[ラジアン/frame]
 	const float kRotSpeed = 0.02f;
-	// 押した方向で移動ベクトルを変更
+	// 押した方向でベクトルを変更
 	if (input_->PushKey(DIK_A)) {
 		worldTransform_.rotation_.y += kRotSpeed;
 	} else if (input_->PushKey(DIK_D)) {
 		worldTransform_.rotation_.y -= kRotSpeed;
 	}
 }
+
 void Player::Attack() {
-	if (input_->PushKey(DIK_W)) {
+	if (input_->TriggerKey(DIK_SPACE)) {
 		// 弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(model_, worldTransform_.translation_);
 
 		// 弾を登録
-		bullet_ = newBullet;
+		bullets_.push_back(newBullet);
 	}
 }
+
 void Player::Draw(ViewProjection viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 
 	// 弾描画
-	if (bullet_) {
-		bullet_->Draw(viewProjection);
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Draw(viewProjection);
 	}
 }
 

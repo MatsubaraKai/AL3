@@ -1,4 +1,5 @@
 #include "Matrix.h"
+
 Vector3 Add(const Vector3& v1, const Vector3& v2) {
 	Vector3 result;
 	result.x = v1.x + v2.x;
@@ -225,5 +226,13 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vecto
 	result = Multiply(
 	    MakeScaleMatrix(scale), Multiply(MakeRotateMatrix(rot), MakeTranslateMatrix(translate)));
 
+	return result;
+}
+
+Vector3 VectorAdd(const Vector3& translation, const Vector3& move) {
+	Vector3 result;
+	result.x = translation.x + move.x;
+	result.y = translation.y + move.y;
+	result.z = translation.z + move.z;
 	return result;
 }
