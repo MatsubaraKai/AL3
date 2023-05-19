@@ -8,6 +8,7 @@ GameScene::~GameScene() {
 	delete model_;
 	delete player_;
 	delete debugCamera_;
+	delete enemy_;
 }
 
 void GameScene::Initialize() {
@@ -31,6 +32,11 @@ void GameScene::Initialize() {
 	//自キャラの初期化
 	player_->Initialize(model_,textureHandle_);
 
+	//敵キャラの生成
+	enemy_ = new Enemy();
+	//敵キャラの初期化
+	Vector3 position = {0, 3, 30};
+	enemy_->Initialize(model_, position);
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(50, 50);
@@ -42,6 +48,7 @@ void GameScene::Initialize() {
 
 void GameScene::Update() { 
 	player_->Update();
+	enemy_->Update();
 	//デバッグカメラの更新
 	debugCamera_->Update();
 	#ifdef _DEBUG
@@ -92,7 +99,7 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	player_->Draw(viewProjection_);
-
+	enemy_->Draw(viewProjection_);
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
