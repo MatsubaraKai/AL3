@@ -1,79 +1,39 @@
-﻿
-#include "Enemy.h"
+﻿#include "Enemy.h"
 #include "Matrix.h"
 #include <cassert>
 
-    void
-    Enemy::Initialize(Model* model, const Vector3& position) {
+Enemy::Enemy() {}
+
+Enemy::~Enemy() { delete phase_; }
+
+void Enemy::Initialize(Model* model) {
 	assert(model);
 
 	model_ = model;
-
 	// テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("jem.png");
+	textureHandle_ = TextureManager::Load("diamond.png");
+
+	// フェーズ開始
+	phase_ = new EnemyApproach();
 
 	worldTransform_.Initialize();
 
-	worldTransform_.translation_ = position;
-
-	move_ = {0, 0.005f, 0};
-
-	kApproachSpeed_ = 0.003f;
-
-	kLeaveSpeed_ = 0.005f;
-
-	static_cast<size_t>(phase_);
-}
-
-void (Enemy::*Enemy::phaseTable_[])() = {
-    &Enemy::Approach, // 接近
-    &Enemy::Leave     // 離脱
-};
-
-// 接近
-void Enemy::Approach() {
-	move_.z -= kApproachSpeed_;
-	if (worldTransform_.translation_.z < 0.0f) {
-		(this->*phaseTable_[1])();
-	}
-}
-
-// 離脱
-void Enemy::Leave() {
-	move_.x -= kLeaveSpeed_;
-	move_.y += kLeaveSpeed_;
+	worldTransform_.translation_ = {0, 5, 20};
 }
 
 void Enemy::Update() {
-	// Vector3 move = {0, 0, 0};
-	// const float kCharacterSpeed = 0.2f;
-
-	//// フェーズと移動
-	// switch (phase_)
-	//{
-	//// 接近フェーズ
-	// case Phase::Approach:
-	// default:
-	//	move.z -= kCharacterSpeed;
-	//	if (worldTransform_.translation_.z < 0.0f)
-	//	{
-	//		phase_ = Phase::Leave;
-	//	}
-	//	break;
-	//// 離脱フェーズ
-	// case Phase::Leave:
-	//	move.x -= kCharacterSpeed;
-	//	move.y += kCharacterSpeed;
-	//	break;
-	// }
-
-	(this->*phaseTable_[0])();
-
-	worldTransform_.translation_ = VectorAdd(worldTransform_.translation_, move_);
+	phase_->Update(this);
 
 	// ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
 }
+
+void Enemy::ChangePhase(EnemyState* newState) {
+	delete phase_;
+	phase_ = newState;
+}
+
+void Enemy::Move(Vector3 speed) { worldTransform_.translation_ += speed; };
 
 void Enemy::Draw(const ViewProjection& viewProjection) {
 	// モデルの描画
