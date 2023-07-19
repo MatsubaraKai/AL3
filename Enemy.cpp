@@ -24,7 +24,7 @@
 
 	static_cast<size_t>(phase_);
 }
-
+//フェーズの関数テーブル
 void (Enemy::*Enemy::phaseTable_[])() = {
     &Enemy::Approach, // 接近
     &Enemy::Leave     // 離脱
@@ -45,27 +45,6 @@ void Enemy::Leave() {
 }
 
 void Enemy::Update() {
-	// Vector3 move = {0, 0, 0};
-	// const float kCharacterSpeed = 0.2f;
-
-	//// フェーズと移動
-	// switch (phase_)
-	//{
-	//// 接近フェーズ
-	// case Phase::Approach:
-	// default:
-	//	move.z -= kCharacterSpeed;
-	//	if (worldTransform_.translation_.z < 0.0f)
-	//	{
-	//		phase_ = Phase::Leave;
-	//	}
-	//	break;
-	//// 離脱フェーズ
-	// case Phase::Leave:
-	//	move.x -= kCharacterSpeed;
-	//	move.y += kCharacterSpeed;
-	//	break;
-	// }
 
 	(this->*phaseTable_[0])();
 
