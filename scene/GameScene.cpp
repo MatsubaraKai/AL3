@@ -1,7 +1,8 @@
 #include "GameScene.h"
+#include "AxisIndicator.h"
 #include "TextureManager.h"
 #include <cassert>
-#include "AxisIndicator.h"
+
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
@@ -17,58 +18,63 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("diamond.png");
-	//3Dモデルの生成
 	model_ = Model::Create();
 
-	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
-	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-	
-	//自キャラ
-	player_ = new Player();
-	//自キャラの初期化
-	player_->Initialize(model_, textureHandle_);
-
-	//敵キャラの生成
-	enemy_ = new Enemy();
-	//敵キャラの初期化
-	enemy_->Initialize(model_, textureHandle_);
 
 	// デバッグカメラの生成
-	debugCamera_ = new DebugCamera(50, 50);
-	//軸方向表示を有効にする
+	debugCamera_ = new DebugCamera(1280, 720);
+
+	input_ = Input::GetInstance();
+
+	// 軸方向表示の表示を有効化
 	AxisIndicator::GetInstance()->SetVisible(true);
-	//軸方向表示が参照するビュープロジェクションを指定する（アドレス渡し）
+	// 参照するビュープロジェクションを指定
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
+
+	// 自キャラの生成
+	player_ = new Player();
+	// 自キャラの初期化
+	player_->Initialize(model_, textureHandle_);
+
+	// 敵キャラの生成
+	enemy_ = new Enemy();
+	enemy_->SetPlayer(player_);
+	// 敵キャラの初期化
+	Vector3 position = {0, 0, 20};
+	enemy_->Initialize(model_);
 }
 
-void GameScene::Update() { 
+void GameScene::Update() {
+	// 自キャラの更新
 	player_->Update();
-	if (enemy_ != nullptr) {
-		enemy_->Update();
-	}
-	//デバッグカメラの更新
+
+	// 敵キャラの更新
+	enemy_->Update();
+
 	debugCamera_->Update();
-	#ifdef _DEBUG
-	if (input_->TriggerKey(DIK_SPACE)) {
-	 isDebugCameraActive_ = true;
+#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_Q)) {
+		if (isDebugCameraActive_ == false) {
+			isDebugCameraActive_ = true;
+		} else {
+			isDebugCameraActive_ = false;
+		}
 	}
-		#endif
+#endif
 	// カメラの処理
 	if (isDebugCameraActive_) {
-	 // デバッグカメラの更新
-	 debugCamera_->Update();
-
-	 viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-	 viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-	 // ビュープロジェクション行列の転送
-	 viewProjection_.TransferMatrix();
+		// デバッグカメラの更新
+		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		// ビュープロジェクション行列の転送
+		viewProjection_.TransferMatrix();
 	} else {
-	 // ビュープロジェクション行列の更新と転送
-	 viewProjection_.UpdateMatrix();
+		// ビュープロジェクション行列の更新と転送
+		viewProjection_.UpdateMatrix();
 	}
 }
 
@@ -84,7 +90,6 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
-	
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -99,8 +104,9 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	player_->Draw(viewProjection_);
 	enemy_->Draw(viewProjection_);
+	player_->Draw(viewProjection_);
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion

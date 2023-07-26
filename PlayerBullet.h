@@ -1,10 +1,11 @@
-﻿#pragma once
+#pragma once
 #include "Model.h"
 #include "WorldTransform.h"
 
-class PlayerBullet {
+class PlayerBullet 
+{
 public:
-	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
+	void Initialize(Model* model, const Vector3& position,const Vector3& velocity);
 
 	void Update();
 
