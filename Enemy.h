@@ -1,36 +1,48 @@
 ﻿#pragma once
-#include "EnemyState.h"
-#include "Matrix.h"
+#include "EnemyBullet.h"
+#include "Input.h"
 #include "Model.h"
 #include "WorldTransform.h"
-
-class EnemyState;
+#include <List>
 
 class Enemy {
 public:
-	Enemy();
-
 	~Enemy();
 
-	void Initialize(Model* model);
+	void Initialize(Model* model, uint32_t textureHandle);
 
 	void Update();
 
-	void Draw(const ViewProjection& viewProjection);
+	void Fire();
 
-	void Move(Vector3 speed);
+	void Draw(ViewProjection viewProjection);
 
-	void ChangePhase(EnemyState* newState);
+	void ApproachPhaseInitialize();
 
-	Vector3 GetTranslation() { return worldTransform_.translation_; };
+	void ApproachPhaseUpdate();
 
-private:
-	static void (Enemy::*phasetable_[])();
+	void LeavePhaseUpdate();
+
+	enum class Phase {
+		Start,
+		Approach,
+		Leave,
+	};
+
+	static const int kFireInterval = 60;
 
 private:
 	WorldTransform worldTransform_;
+
 	Model* model_ = nullptr;
+
 	uint32_t textureHandle_ = 0u;
 
-	EnemyState* phase_ = nullptr;
+	Input* input_ = nullptr;
+
+	Phase phase_ = Phase::Start;
+
+	std::list<EnemyBullet*> bullets_;
+
+	int32_t shotTimer_ = 0;
 };

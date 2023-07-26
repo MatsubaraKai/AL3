@@ -1,15 +1,15 @@
 ﻿#include "Matrix.h"
-#include"PlayerBullet.h"
+#include "EnemyBullet.h"
 #include <cassert>
 
-void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
+void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
 	// NULLポインタチェック
 	assert(model);
 
 	model_ = model;
 
 	// テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("jem.png");
+	textureHandle_ = TextureManager::Load("flandoll.png");
 
 	worldTransform_.Initialize();
 
@@ -20,7 +20,7 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 	velocity_ = velocity;
 }
 
-void PlayerBullet::Update() {
+void EnemyBullet::Update() {
 	// ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
 
@@ -32,7 +32,7 @@ void PlayerBullet::Update() {
 	}
 }
 
-void PlayerBullet::Draw(const ViewProjection& viewProjection) {
+void EnemyBullet::Draw(const ViewProjection& viewProjection) {
 	// モデルの描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }

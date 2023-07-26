@@ -1,41 +1,107 @@
-﻿#include "Enemy.h"
-#include "Matrix.h"
+﻿#include "Matrix.h"
+#include "Enemy.h"
+#include "ImGuiManager.h"
+#include "PrimitiveDrawer.h"
+#include "TextureManager.h"
 #include <cassert>
 
-Enemy::Enemy() {}
+Enemy::~Enemy() {
+	for (EnemyBullet* bullet : bullets_) {
+		delete bullet;
+	}
+}
 
-Enemy::~Enemy() { delete phase_; }
-
-void Enemy::Initialize(Model* model) {
+void Enemy::Initialize(Model* model, uint32_t textureHandle) {
 	assert(model);
 
 	model_ = model;
 	// テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("diamond.png");
-
-	// フェーズ開始
-	phase_ = new EnemyApproach();
+	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
+	worldTransform_.translation_.x = 7.0f;
+	worldTransform_.translation_.y = 2.0f;
+	worldTransform_.translation_.z = 30.0f;
 
-	worldTransform_.translation_ = {0, 5, 20};
+	ApproachPhaseInitialize();
 }
 
 void Enemy::Update() {
-	phase_->Update(this);
+	bullets_.remove_if([](EnemyBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
 
-	// ワールドトランスフォームの更新
-	worldTransform_.UpdateMatrix();
+	worldTransform_.TransferMatrix();
+
+	Vector3 move = {0, 0, 0};
+
+	switch (phase_) { 
+	case Phase::Approach:
+	default:
+		ApproachPhaseUpdate();
+		for (EnemyBullet* bullet : bullets_)
+		{
+			bullet->Update();
+		}
+		break;
+	case Phase::Leave:
+		LeavePhaseUpdate();
+		break;
+	}
 }
 
-void Enemy::ChangePhase(EnemyState* newState) {
-	delete phase_;
-	phase_ = newState;
-}
-
-void Enemy::Move(Vector3 speed) { worldTransform_.translation_ += speed; };
-
-void Enemy::Draw(const ViewProjection& viewProjection) {
+void Enemy::Draw(ViewProjection viewProjection) {
 	// モデルの描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+
+	for (EnemyBullet* bullet : bullets_) {
+		bullet->Draw(viewProjection);
+	}
+}
+
+void Enemy::Fire() { 
+	const float kBulletSpeet = -1.0f;
+	Vector3 velocity(0, 0, kBulletSpeet);
+
+	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+
+	EnemyBullet* newBullet = new EnemyBullet();
+	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+
+	bullets_.push_back(newBullet);
+}
+
+void Enemy::ApproachPhaseInitialize() { shotTimer_ = 0; }
+
+void Enemy::ApproachPhaseUpdate()
+{ 
+	const float kApproachEnemySoeed = 0.2f;
+	Vector3 move = {0, 0, 0};
+
+	move.z -= kApproachEnemySoeed;
+	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+	worldTransform_.matWorld_ = MakeAffineMatrix(
+	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+
+	shotTimer_--;
+	if (shotTimer_ < 0) {
+		Fire();
+
+		shotTimer_ = kFireInterval;
+	}
+}
+
+void Enemy::LeavePhaseUpdate() {
+	const float kLeaveEnemyLPSpeed = 0.3f;
+	Vector3 move = {0, 0, 0};
+
+	move.x -= kLeaveEnemyLPSpeed;
+	move.y += kLeaveEnemyLPSpeed;
+	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+	worldTransform_.matWorld_ = MakeAffineMatrix(
+	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 }

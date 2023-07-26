@@ -1,9 +1,9 @@
-#include "Player.h"
 #include "ImGuiManager.h"
 #include "Matrix.h"
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
 #include <cassert>
+#include "Player.h"
 
 Player::Player() {}
 
@@ -36,7 +36,7 @@ void Player::Update() {
 
 	Vector3 move = {0, 0, 0};
 
-	const float kCharacterSpeed = 0.1f;
+	const float kCharacterSpeed = 0.2f;
 
 	if (input_->PushKey(DIK_LEFT)) {
 		move.x -= kCharacterSpeed;
@@ -55,7 +55,7 @@ void Player::Update() {
 	ImGui::Begin("Player");
 	ImGui::InputFloat3("InputFloat3", moves);
 	ImGui::SliderFloat3("SliderFloat3", moves, 0.0f, 2.0f);
-	ImGui::Text("DebugCamera ENTER", 2050, 12, 31);
+	ImGui::Text("DebugCamera SPACE \n Bullet SPACE", 2050, 12, 31);
 	ImGui::End();
 
 	move.x = moves[0] - 1;

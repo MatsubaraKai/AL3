@@ -7,6 +7,7 @@
 #include "TextureManager.h"
 #include "WinApp.h"
 
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApp* win = nullptr;
@@ -91,6 +92,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		imguiManager->Draw();
 		// 描画終了
 		dxCommon->PostDraw();
+
+		/*Vector3 cameraTranslate{0.0f, 1.9f, -6.49f};
+		Vector3 cameraRotate{0.26f, 0.0f, 0.0f};
+
+		Matrix4x4 cameraMatrix =
+		    MyMath::MakeAffineMatrix({1.0f, 1.0f, 1.0f}, cameraRotate, cameraTranslate);
+		ImGui::Begin("Debug");
+		ImGui::DragFloat3("cameraTRa", &cameraTranslate.x, 0.1f, -50.0f, 50.0f);
+		ImGui::DragFloat3("cameraRot", &cameraRotate.x, 0.1f, -50.0f, 50.0f);
+		ImGui::End();*/
 	}
 
 	// 各種解放
