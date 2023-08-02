@@ -2,8 +2,7 @@
 #include "Model.h"
 #include "WorldTransform.h"
 
-class PlayerBullet 
-{
+class PlayerBullet {
 public:
 	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
 
@@ -11,12 +10,12 @@ public:
 
 	void Draw(const ViewProjection& viewProjection);
 
-	bool IsDead() const { return isDead_; }
-
 	// 衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
 
 	Vector3 GetWorldPosition();
+
+	bool IsDead() const { return isDead_; }
 
 private:
 	WorldTransform worldTransform_;

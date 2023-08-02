@@ -8,6 +8,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "SafeDelete.h"
+#include "Skydome.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
@@ -68,6 +69,9 @@ private: // メンバ変数
 	DebugCamera* debugCamera_ = nullptr;
 
 	Enemy* enemy_ = nullptr;
+
+	Skydome* skydome_;
+	Model* skydomeModel_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用

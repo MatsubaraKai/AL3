@@ -4,8 +4,7 @@
 
 class Player;
 
-class EnemyBullet
-{
+class EnemyBullet {
 public:
 	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
 

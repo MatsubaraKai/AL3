@@ -1,11 +1,11 @@
 ﻿#pragma once
-#include "Matrix.h"
 #include "CMath.h"
 #include "EnemyBullet.h"
 #include "EnemyState.h"
+#include "Matrix.h"
 #include "Model.h"
-#include "WorldTransform.h"
 #include "TimedCall.h"
+#include "WorldTransform.h"
 
 class Player;
 
@@ -42,11 +42,14 @@ public:
 
 	const std::list<EnemyBullet*>& GetBullets() const { return bullets_; }
 
+	static const int kFireInterval = 60;
+
+	int32_t FireTimer_ = 0;
+
 private:
 	// メンバ関数ポインタのテーブル
 	static void (Enemy::*phasetable_[])();
 
-private:
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0u;
@@ -58,9 +61,4 @@ private:
 	EnemyState* phase_ = nullptr;
 
 	std::list<TimedCall*> timedCalls_;
-
-public:
-	static const int kFireInterval = 60;
-
-	int32_t FireTimer_ = 0;
 };

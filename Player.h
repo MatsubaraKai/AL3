@@ -1,12 +1,11 @@
 ﻿#pragma once
-#include "Model.h"
-#include "WorldTransform.h"
 #include "Input.h"
+#include "Model.h"
 #include "PlayerBullet.h"
+#include "WorldTransform.h"
 #include <list>
 
-class Player 
-{
+class Player {
 public:
 	Player();
 
