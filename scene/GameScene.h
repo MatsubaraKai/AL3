@@ -1,22 +1,24 @@
 #pragma once
 
 #include "Audio.h"
-#include "DebugCamera.h"
 #include "DirectXCommon.h"
-#include "Enemy.h"
 #include "Input.h"
 #include "Model.h"
-#include "Player.h"
 #include "SafeDelete.h"
-#include "Skydome.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "Player.h"
+#include "DebugCamera.h"
+#include "Enemy.h"
+#include "RailCamera.h"
+#include "Skydome.h"
 
 /// <summary>
 /// ゲームシーン
 /// </summary>
-class GameScene {
+class GameScene
+{
 
 public: // メンバ関数
 	/// <summary>
@@ -72,6 +74,8 @@ private: // メンバ変数
 
 	Skydome* skydome_;
 	Model* skydomeModel_ = nullptr;
+
+	RailCamera* railCamera_;
 
 	/// <summary>
 	/// ゲームシーン用

@@ -21,11 +21,13 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 	velocity_ = velocity;
 }
 
-void EnemyBullet::Update() {
+void EnemyBullet::Update() 
+{
 	worldTransform_.translation_ = VectorAdd(worldTransform_.translation_, velocity_);
 
 	// 時間経過で消滅
-	if (--deathTimer_ <= 0) {
+	if (--deathTimer_ <= 0)
+	{
 		isDead_ = true;
 	}
 
@@ -33,14 +35,19 @@ void EnemyBullet::Update() {
 	worldTransform_.UpdateMatrix();
 }
 
-void EnemyBullet::OnCollision() { isDead_ = true; }
+void EnemyBullet::OnCollision()
+{ 
+	isDead_ = true;
+}
 
-void EnemyBullet::Draw(const ViewProjection& viewProjection) {
+void EnemyBullet::Draw(const ViewProjection& viewProjection) 
+{
 	// モデルの描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }
 
-Vector3 EnemyBullet::GetWorldPosition() {
+Vector3 EnemyBullet::GetWorldPosition()
+{
 	Vector3 worldPos;
 	worldPos.x = worldTransform_.matWorld_.m[3][0];
 	worldPos.y = worldTransform_.matWorld_.m[3][1];

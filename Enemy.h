@@ -1,23 +1,24 @@
 ﻿#pragma once
-#include "CMath.h"
+#include "Matrix.h"
 #include "EnemyBullet.h"
 #include "EnemyState.h"
-#include "Matrix.h"
 #include "Model.h"
-#include "TimedCall.h"
 #include "WorldTransform.h"
+#include "TimedCall.h"
+#include "CMath.h"
 
 class Player;
 
 class EnemyState;
 
-class Enemy {
+class Enemy
+{
 public:
 	Enemy();
 
 	~Enemy();
 
-	void Initialize(Model* model);
+	void Initialize(Model* model, Vector3 pos);
 
 	void Update();
 
@@ -41,7 +42,7 @@ public:
 	void OnCollision();
 
 	const std::list<EnemyBullet*>& GetBullets() const { return bullets_; }
-
+	
 	static const int kFireInterval = 60;
 
 	int32_t FireTimer_ = 0;
