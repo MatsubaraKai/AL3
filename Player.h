@@ -5,8 +5,7 @@
 #include "WorldTransform.h"
 #include <list>
 
-class Player 
-{
+class Player {
 public:
 	Player();
 

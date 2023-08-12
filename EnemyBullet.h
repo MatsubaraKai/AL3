@@ -2,14 +2,19 @@
 #include "Model.h"
 #include "WorldTransform.h"
 
-class EnemyBullet
-{
+class Player;
+
+class EnemyBullet {
 public:
 	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
 
 	void Update();
 
 	void Draw(const ViewProjection& viewProjection);
+
+	bool IsDead() const { return isDead_; }
+
+	void SetPlayer(Player* player) { player_ = player; }
 
 private:
 	WorldTransform worldTransform_;
@@ -24,6 +29,5 @@ private:
 	int32_t deathTimer_ = kLifeTime;
 	bool isDead_ = false;
 
-public:
-	bool IsDead() const { return isDead_; }
+	Player* player_;
 };

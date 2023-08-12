@@ -1,8 +1,8 @@
 ﻿#pragma once
-#include "Matrix.h"
 #include "CMath.h"
 #include "EnemyBullet.h"
 #include "EnemyState.h"
+#include "Matrix.h"
 #include "Model.h"
 #include "TimedCall.h"
 #include "WorldTransform.h"
