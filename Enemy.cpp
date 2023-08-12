@@ -5,21 +5,17 @@
 
 Enemy::Enemy() {}
 
-Enemy::~Enemy()
-{
-	for (EnemyBullet* bullet : bullets_) 
-	{
+Enemy::~Enemy() {
+	for (EnemyBullet* bullet : bullets_) {
 		delete bullet;
 	}
 
-	for (TimedCall* timedCall : timedCalls_)
-	{
+	for (TimedCall* timedCall : timedCalls_) {
 		delete timedCall;
 	}
 }
 
-void Enemy::Initialize(Model* model)
-{
+void Enemy::Initialize(Model* model) {
 	assert(model);
 
 	model_ = model;
@@ -28,7 +24,7 @@ void Enemy::Initialize(Model* model)
 	textureHandle_ = TextureManager::Load("diamond.png");
 
 	// フェーズ開始
-	 phase_ = new EnemyApproach;
+	/* phase_ = new EnemyApproach;*/
 
 	worldTransform_.Initialize();
 
@@ -38,34 +34,28 @@ void Enemy::Initialize(Model* model)
 	FireandReset();
 }
 
-void Enemy::Update()
-{
+void Enemy::Update() {
 	// デスフラグの立った弾の削除
-	bullets_.remove_if([](EnemyBullet* bullet) 
-	{
-		if (bullet->IsDead())
-		{
+	bullets_.remove_if([](EnemyBullet* bullet) {
+		if (bullet->IsDead()) {
 			delete bullet;
 			return true;
 		}
 		return false;
 	});
 
-	 phase_->Update(this);
+	/* phase_->Update(this);*/
 
 	// タイマー
-	timedCalls_.remove_if([](TimedCall* timedcall)
-	{
-		if (timedcall->IsFinish())
-		{
+	timedCalls_.remove_if([](TimedCall* timedcall) {
+		if (timedcall->IsFinish()) {
 			delete timedcall;
 			return true;
 		}
 		return false;
 	});
 
-	for (TimedCall* timedCall : timedCalls_) 
-	{
+	for (TimedCall* timedCall : timedCalls_) {
 		timedCall->Update();
 	}
 
@@ -73,25 +63,19 @@ void Enemy::Update()
 	worldTransform_.UpdateMatrix();
 
 	// 弾更新
-	for (EnemyBullet* bullet : bullets_)
-	{
+	for (EnemyBullet* bullet : bullets_) {
 		bullet->Update();
 	}
 }
 
-void Enemy::ChangePhase(EnemyState* newState) 
-{
+void Enemy::ChangePhase(EnemyState* newState) {
 	delete phase_;
 	phase_ = newState;
 }
 
-void Enemy::Move(Vector3 speed) 
-{
-	worldTransform_.translation_ += speed; 
-};
+void Enemy::Move(Vector3 speed) { worldTransform_.translation_ += speed; };
 
-void Enemy::Fire() 
-{
+void Enemy::Fire() {
 	assert(player_);
 
 	// 弾の速度
@@ -116,20 +100,17 @@ void Enemy::Fire()
 
 void Enemy::OnCollision() {}
 
-void Enemy::Draw(const ViewProjection& viewProjection) 
-{
+void Enemy::Draw(const ViewProjection& viewProjection) {
 	// モデルの描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 
 	// 弾描画
-	for (EnemyBullet* bullet : bullets_)
-	{
+	for (EnemyBullet* bullet : bullets_) {
 		bullet->Draw(viewProjection);
 	}
 }
 
-void Enemy::FireandReset()
-{
+void Enemy::FireandReset() {
 	// 攻撃処理
 	Fire();
 
@@ -137,8 +118,7 @@ void Enemy::FireandReset()
 	timedCalls_.push_back(new TimedCall(std::bind(&Enemy::FireandReset, this), kFireInterval));
 }
 
-Vector3 Enemy::GetWorldPosition()
-{
+Vector3 Enemy::GetWorldPosition() {
 	Vector3 worldPos;
 	worldPos.x = worldTransform_.matWorld_.m[3][0];
 	worldPos.y = worldTransform_.matWorld_.m[3][1];

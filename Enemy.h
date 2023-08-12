@@ -1,17 +1,18 @@
 ﻿#pragma once
-#include "Matrix.h"
 #include "CMath.h"
+#include "Collider.h"
 #include "EnemyBullet.h"
 #include "EnemyState.h"
+#include "Matrix.h"
 #include "Model.h"
-#include "WorldTransform.h"
 #include "TimedCall.h"
+#include "WorldTransform.h"
 
 class Player;
 
 class EnemyState;
 
-class Enemy {
+class Enemy : public Collider {
 public:
 	Enemy();
 
