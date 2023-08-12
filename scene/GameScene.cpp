@@ -5,14 +5,16 @@
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {
+GameScene::~GameScene() 
+{
 	delete model_;
 	delete player_;
 	delete debugCamera_;
 	delete enemy_;
 }
 
-void GameScene::Initialize() {
+void GameScene::Initialize()
+{
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
@@ -47,7 +49,8 @@ void GameScene::Initialize() {
 	enemy_->Initialize(model_);
 }
 
-void GameScene::Update() {
+void GameScene::Update() 
+{
 	// 自キャラの更新
 	player_->Update();
 
@@ -59,8 +62,10 @@ void GameScene::Update() {
 	debugCamera_->Update();
 
 #ifdef _DEBUG
-	if (input_->TriggerKey(DIK_Q)) {
-		if (isDebugCameraActive_ == false) {
+	if (input_->TriggerKey(DIK_Q))
+	{
+		if (isDebugCameraActive_ == false) 
+		{
 			isDebugCameraActive_ = true;
 		} else {
 			isDebugCameraActive_ = false;
@@ -68,7 +73,8 @@ void GameScene::Update() {
 	}
 #endif
 	// カメラの処理
-	if (isDebugCameraActive_) {
+	if (isDebugCameraActive_) 
+	{
 		// デバッグカメラの更新
 		debugCamera_->Update();
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
@@ -81,7 +87,8 @@ void GameScene::Update() {
 	}
 }
 
-void GameScene::Draw() {
+void GameScene::Draw()
+{
 
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
@@ -128,40 +135,46 @@ void GameScene::Draw() {
 #pragma endregion
 }
 
-void GameScene::CheckAllCollisions() {
-	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
-	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+void GameScene::CheckAllCollisions() 
+{
+	std::list<Collider*> colliders_;
 
-#pragma region 自キャラと敵弾
+	colliders_.push_back(player_);
+	colliders_.push_back(enemy_);
 
-	for (EnemyBullet* bullet : enemyBullets) {
-		CheckCollisionPair(bullet, player_);
+	for (PlayerBullet* pBullet : player_->GetBullets()) 
+	{
+		colliders_.push_back(pBullet);
 	}
 
-#pragma endregion
-
-#pragma region 自弾と敵キャラ
-
-	for (PlayerBullet* bullet : playerBullets) {
-		CheckCollisionPair(bullet, enemy_);
+	for (EnemyBullet* eBullet : enemy_->GetBullets()) 
+	{
+		colliders_.push_back(eBullet);
 	}
 
-#pragma endregion
+	std::list<Collider*>::iterator itrA = colliders_.begin();
 
-#pragma region 自弾と敵弾
-
-	for (EnemyBullet* eBullet : enemyBullets) {
-		for (PlayerBullet* pbullet : playerBullets) {
-			CheckCollisionPair(eBullet, pbullet);
+	for (; itrA != colliders_.end(); ++itrA)
+	{
+		std::list<Collider*>::iterator itrB = itrA;
+		++itrB;
+		for (; itrB != colliders_.end(); ++itrB) 
+		{
+			CheckCollisionPair(*(itrA), *(itrB));
 		}
 	}
-
-#pragma endregion
 }
 
-void GameScene::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
+void GameScene::CheckCollisionPair(Collider* colliderA, Collider* colliderB)
+{
+	if (!(colliderA->GetCollisionAttribute() & colliderB->GetCollisionMask()) ||
+	    !(colliderB->GetCollisionAttribute() & colliderA->GetCollisionMask())) 
+	{
+		return;
+	}
 	Vector3 posA = colliderA->GetWorldPosition();
 	Vector3 posB = colliderB->GetWorldPosition();
+
 	float radA = colliderA->Getradius();
 	float radB = colliderB->Getradius();
 
@@ -169,7 +182,8 @@ void GameScene::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
 	    (posB.x - posA.x) * (posB.x - posA.x), (posB.y - posA.y) * (posB.y - posA.y),
 	    (posB.z - posA.z) * (posB.z - posA.z)};
 
-	if (Distance.x + Distance.y + Distance.z <= (radA + radB) * (radA + radB)) {
+	if (Distance.x + Distance.y + Distance.z <= (radA + radB) * (radA + radB))
+	{
 		colliderA->OnCollision();
 		colliderB->OnCollision();
 	}
