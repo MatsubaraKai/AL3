@@ -4,6 +4,7 @@
 #include <cassert>
 #include "ImGuiManager.h"
 #include <player/Player.h>
+
 void Player::Initialize(Model* model, uint32_t textureHandle, Vector3 position) {
 
 	// NULLポインタチェック
@@ -68,13 +69,9 @@ void Player::Update() {
 		move.y -= kCharacterSpeed;
 	}
 	
-	
-
 	// 座標移動(ベクトルの加算)
 	worldTransform_.translation_.x += move.x;
 	worldTransform_.translation_.y -= move.y;
-
-	
 
 	// 移動限界座標
 	const float kMoveLimitX = 70;
@@ -89,7 +86,6 @@ void Player::Update() {
 	// ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
 	
-
 	// キャラクターの座標を画面表示する処理
 	ImGui::Begin("Player pos");
 	// float3入力ボックス

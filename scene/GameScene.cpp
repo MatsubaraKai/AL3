@@ -208,18 +208,18 @@ void GameScene::Draw() {
 		}*/
 
 		float leftA = posA.x;
-		float rightA = posA.x + 2.0f;
+		float rightA = posA.x + 1.9f;
 		float topA = posA.y;
-		float bottomA = posA.y + 2.0f;
+		float bottomA = posA.y + 1.9f;
 		float nearA = posA.z;
-		float farA = posA.z + 2.0f;
+		float farA = posA.z + 1.9f;
 
 		float leftB = posB.x;
-		float rightB = posB.x + 2.0f;
+		float rightB = posB.x + 1.9f;
 		float topB = posB.y;
-		float bottomB = posB.y + 2.0f;
+		float bottomB = posB.y + 1.9f;
 		float nearB = posB.z;
-		float farB = posB.z + 2.0f;
+		float farB = posB.z + 1.9f;
 
 		if (leftA <= rightB && leftB <= rightA &&
 			topA <= bottomB && topB <= bottomA &&

@@ -56,7 +56,7 @@ private:
 	float kCharacterSpeedX = 0.15f;
 	float kCharacterSpeedY = 0.15f;
 
-	float kCharacterSpeed = 0.3f;
+	float kCharacterSpeed = 0.2f;
 
 	bool isStart = false;
 
