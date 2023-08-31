@@ -20,7 +20,7 @@ void Enemy::Initialize(Model* model, const Vector3& pos, const Vector3& velocity
 	model_ = model;
 
 	// テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("diamond.png");
+	textureHandle_ = TextureManager::Load("particle01.png");
 
 	// フェーズ開始
 	phase_ = new EnemyApproach();
