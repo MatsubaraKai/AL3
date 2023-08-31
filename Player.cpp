@@ -97,10 +97,10 @@ void Player::Update(ViewProjection viewProjection)
 	    worldTransform_.translation_.x, worldTransform_.translation_.y,
 	    worldTransform_.translation_.z};
 
-	ImGui::Begin("Player");
+	/*ImGui::Begin("Player");
 	ImGui::Text("debugCamera = Enter");
 	ImGui::SliderFloat3("Player", inputFloat3, -40.0f, 40.0f);
-	ImGui::End();
+	ImGui::End();*/
 
 	worldTransform_.translation_.x = inputFloat3[0];
 	worldTransform_.translation_.y = inputFloat3[1];
@@ -314,9 +314,9 @@ void Player::SetReticle(const ViewProjection viewProjection)
 	
 	worldtransform3DReticle_.UpdateMatrix();
 	
-	ImGui::Begin("Player");
+	/*ImGui::Begin("Player");
 	ImGui::Text("Near:(%+.2f,%+.2f,%.2f)", posNear.x, posNear.y, posNear.z);
 	ImGui::Text("Far:(%+.2f,%+.2f,%.2f)", posFar.x, posFar.y, posFar.z);
 	ImGui::Text("3DRetixle:(%+.2f,%+.2f,%.2f)", worldtransform3DReticle_.translation_.x, worldtransform3DReticle_.translation_.y, worldtransform3DReticle_.translation_.z);
-	ImGui::End();
+	ImGui::End();*/
 }
