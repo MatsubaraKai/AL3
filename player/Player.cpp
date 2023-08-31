@@ -40,10 +40,10 @@ void Player::Update() {
 	});
 
 	// キャラクターの移動ベクトル
-	move = {0, 0.2f, 0};
-	kCharacterSpeedY = 0.4f;
+	move = {0, 0, 0};
 
 	move.x += kCharacterSpeedX;
+	move.y += kCharacterSpeedY;
 	
 	if (isHit) {
 		move.y = 0;
@@ -57,7 +57,7 @@ void Player::Update() {
 
 	// 押した方向で移動ベクトルを変更(左右)
 	if (input_->PushKey(DIK_SPACE)) {
-		move.y -= kCharacterSpeedY;
+		move.y -= kCharacterSpeed;
 	}
 	
 	
@@ -108,16 +108,10 @@ void Player::Draw(ViewProjection viewProjection_) {
 void Player::Attack() { 
 }
 
-void Player::OnCollision() { 
+void Player::OnCollisionX() { 
 	kCharacterSpeedX *= -1;
 }
 
-void Player::OnCollisionUnderY() {
-	isHit = true; 
-}
-
-void Player::OnCollisionUpY() { 
-	isHit2 = true; }
 
 void Player::SetParent(const WorldTransform* parent) {
 	// 親子関係を結ぶ

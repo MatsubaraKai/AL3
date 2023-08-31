@@ -35,6 +35,8 @@ void GameScene::Initialize() {
 
 	enemyTh_ = TextureManager::Load("player.png");
 
+	damageTh_ = TextureManager::Load("daruma2.png");
+
 	// 3Dモデルの生成
 	model_ = Model::Create();
 
@@ -190,23 +192,23 @@ void GameScene::Draw() {
 		float p2eY = (posB.y - posA.y) * (posB.y - posA.y);
 		float p2eZ = (posB.z - posA.z) * (posB.z - posA.z);
 
-		float pRadius = 1;
-		float eRadius = 1;
+		float pRadius = 1.1f;
+		float eRadius = 1.1f;
 
 		float L = (pRadius + eRadius) * (pRadius + eRadius);
 
 		if (p2eX + p2eY + p2eZ <= L) {
 			// 自キャラの衝突時コールバックを呼び出す
-			if (block->GetType() == 0) {
+			/*if (block->GetType() == 0) {
 				player_->OnCollisionUnderY();
-			}
+			}*/
 			
 			if (block->GetType() == 1) {
-				player_->OnCollisionUpY();
+				player_->OnCollisionY();
 			}
 
 			if (block->GetType() == 2) {
-				player_->OnCollision();
+				player_->OnCollisionX();
 			}
 		}
 	}
@@ -281,7 +283,9 @@ void GameScene::BlockSpown(Vector3 translation, float type) {
 	// ブロックの生成
 	Block* block_ = new Block();
 	// ブロックの初期化
-	block_->Initialize(model_, enemyTh_, translation);
+	if (type < 3) {
+		block_->Initialize(model_, enemyTh_, translation);
+	}
 	// ブロックのタイプ設定
 	block_->SetType(type);
 	AddBlock(block_);
