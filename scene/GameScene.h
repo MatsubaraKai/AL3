@@ -3,25 +3,23 @@
 #include "Audio.h"
 #include "DebugCamera.h"
 #include "DirectXCommon.h"
-#include "Enemy.h"
-#include "EnemyBullet.h"
 #include "Input.h"
 #include "Model.h"
-#include "Player.h"
-#include "RailCamera.h"
 #include "SafeDelete.h"
-#include "Skydome.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "WorldTransform.h"
-#include<sstream>
+#include <sstream>
+
+#include "RailCamera.h"
+#include "Skydome.h"
+#include "enemy/enemy.h"
+#include "player/Player.h"
 
 /// <summary>
 /// ゲームシーン
 /// </summary>
-class GameScene
-{
+class GameScene {
 
 public: // メンバ関数
 	/// <summary>
@@ -50,15 +48,9 @@ public: // メンバ関数
 	void Draw();
 
 	/// <summary>
-	/// 敵弾を追加する
+	///	衝突判定と応答
 	/// </summary>
-	/// <param name="enemyBullet">敵弾</param>
-	void AddEnemyBullet(EnemyBullet* enemyBullet);
-
-	/// <summary>
-	/// 敵の発生
-	/// </summary>
-	void SpawnEnemy(Vector3 pos, Vector3 velocity);
+	void CheckAllCollisions();
 
 	/// <summary>
 	/// 敵発生データの読み込み
@@ -67,48 +59,66 @@ public: // メンバ関数
 
 	/// <summary>
 	/// 敵発生コマンドの更新
-	/// <summary>
+	/// </summary>
 	void UpdateEnemyPopCommands();
 
+	void EnemySpown(Vector3, Vector3);
+
 	/// <summary>
-	/// 衝突判定と応答
+	///	敵:敵弾を追加する
 	/// </summary>
-	void CheckAllCollisions();
+	void AddEnemyBullet(EnemyBullet* enemyBullet);
+	void AddEnemy(Enemy* enemy);
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
-	uint32_t textureHandle_ = 0;
-	Model* model_ = nullptr;
-
-	WorldTransform worldTransform_;
-	ViewProjection viewProjection_;
-
-	// プレイヤー
-	Player* player_ = nullptr;
-
-	// デバッグカメラ有効化
+	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;
-
 	// デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
-	// 敵関連のリスト
+	// テクスチャハンドル
+	uint32_t playerTh_;
+	uint32_t enemyTh_;
+
+	// スプライト
+	Sprite* sprite_ = nullptr;
+
+	// 3Dモデルデータ
+	Model* model_ = nullptr;
+
+	// ビュープロジェクション
+	ViewProjection viewProjection_;
+	// 自キャラ
+	Player* player_ = nullptr;
+	// 敵キャラ
 	std::list<Enemy*> enemys_;
+
+	// 敵弾
 	std::list<EnemyBullet*> enemyBullets_;
 
 	// 天球
-	Skydome* skydome_;
-	Model* skydomeModel_ = nullptr;
+	Skydome* skyDome_ = nullptr;
+	// 3Dモデル
+	Model* modelSkydome_ = nullptr;
 
 	// レールカメラ
-	RailCamera* railCamera_;
+	RailCamera* railCamera_ = nullptr;
 
-	std::stringstream enemyPopCommands;
-	bool isWaitTime_; 
+	// 待機タイマー
 	int32_t waitTimer_;
+	// 待機フラグ
+	bool isWait_ = false;
+
+	float posX;
+	float posY;
+	float posZ;
+
+	// 敵発生コマンド
+	std::stringstream enemyPopCommands;
 
 	/// <summary>
 	/// ゲームシーン用
