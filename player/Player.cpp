@@ -47,7 +47,7 @@ void Player::Update() {
 
 	// 押した方向で移動ベクトルを変更(左右)
 	if (input_->PushKey(DIK_SPACE)) {
-		move.y -= 0.1f;
+		move.y -= 0.3f;
 	}
 
 	// 座標移動(ベクトルの加算)
