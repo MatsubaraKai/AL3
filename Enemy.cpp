@@ -37,7 +37,7 @@ void Enemy::Initialize(Model* model, const Vector3& pos, const Vector3& velocity
 
 void Enemy::Update() 
 {
-	 phase_->Update(this);
+	phase_->Update(this);
 
 	// タイマー
 	timedCalls_.remove_if([](TimedCall* timedcall) 
