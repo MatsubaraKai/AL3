@@ -47,7 +47,7 @@ void Player::Update() {
 
 	// 押した方向で移動ベクトルを変更(左右)
 	if (input_->PushKey(DIK_SPACE)) {
-		move.y -= 0.4f;
+		move.y -= 0.3f;
 	}
 
 	// 座標移動(ベクトルの加算)
@@ -73,7 +73,6 @@ void Player::Update() {
 	// float3入力ボックス
 	ImGui::InputFloat3("InputFloat3", &worldTransform_.translation_.x);
 	// float3スライダー
-	ImGui::SliderFloat3("SliderFloat3", &worldTransform_.translation_.x, -18.0f, 34.0f);
 	// テキスト
 	ImGui::Text("PlayerBullet : Space");
 	// テキスト

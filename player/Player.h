@@ -52,6 +52,6 @@ private:
 	// 弾
 	std::list<PlayerBullet*> bullets_;
 	// キャラクターの移動速さ
-	float kCharacterSpeedX = 0.2f;
-	float kCharacterSpeedY = 0.2f;
+	float kCharacterSpeedX = 0.1f;
+	float kCharacterSpeedY = 0.1f;
 };
