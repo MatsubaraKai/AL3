@@ -1,11 +1,7 @@
 #include "enemy/enemy.h"
 #include "ImGuiManager.h"
-#include "Input.h"
-#include "Model.h"
 #include "TextureManager.h"
-#include "WorldTransform.h"
 #include "enemy/enemyBullet.h"
-#include <cassert>
 #include <player/Player.h>
 #include "GameScene.h"
 
@@ -113,9 +109,6 @@ void Enemy::Attack() {
 	// 弾を生成し、初期化
 	EnemyBullet* newBullet = new EnemyBullet();
 	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
-
-	// 弾を登録
-	gameScene_->AddEnemyBullet(newBullet);
 }
 
 void Enemy::ApproachInitialize() { attackTimer = 0; }

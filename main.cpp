@@ -21,7 +21,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
-	win->CreateGameWindow(L"二年後期ゲーム制作β版");
+	win->CreateGameWindow(L"二年後期ゲーム制作β");
 
 	// DirectX初期化処理
 	dxCommon = DirectXCommon::GetInstance();
