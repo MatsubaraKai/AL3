@@ -65,8 +65,7 @@ void Enemy::ChangePhase(EnemyState* newState)
 	phase_ = newState;
 }
 
-void Enemy::Move(Vector3 speed)
-{
+void Enemy::Move(Vector3 speed) {
 	worldTransform_.translation_ += speed; 
 };
 

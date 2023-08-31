@@ -179,7 +179,7 @@ void Player::Attack()
 
 			// 弾を登録する
 			bullets_.push_back(newBullet);
-			fireTimer = 30;
+			fireTimer = 20;
 		}
 
 		XINPUT_STATE joystate;
@@ -207,7 +207,7 @@ void Player::Attack()
 
 			// 弾を登録する
 			bullets_.push_back(newBullet);
-			fireTimer = 30;
+			fireTimer = 20;
 		}
 	}
 }
